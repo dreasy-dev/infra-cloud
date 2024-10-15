@@ -51,3 +51,47 @@ Rendu Cours Exercice 1
 # 2
 
 ![oui](./group-instances.png)
+![oui](./tag.png)
+![oui](./group-instances.png)
+![oui](tagg3.png)
+
+
+# 3
+
+## 3.1
+![oui](./oui.png)
+
+## 3.2
+![oui](./ii.png)
+
+
+## 3.3 
+Rendu pas PDF exportable
+![oui](./template.png)
+Ici nous définissons en premiere le nom de l'instance. 2 secondes
+Il faut cliquer sur *"additionnals tags"* afin d'ajouter en valeur *"Owner"* son utilisateur. 10 secondes
+Ensuite nous choisissons Ubuntu sous ARM comme distribution et **t4g.small** come *instance type*. 3 secondes
+![oui](./2.png)
+Dans *Key pair login* met none
+et dans Network Settings on séléctionne *Select existing security group* puis **Default**.
+![oui](./3.png)
+
+On peut plus bas encore choisir la taille du disk virtuel mais on laisseras ici 8gig. 
+
+On peut ensuite cliquer a droite sur *Launch Instance* et on attend que notre VM se lance.
+apres un court instant on clique sur l'id de la vm.
+![oui](./ID.png)
+
+Une fois sur la console de management de l'instance, on clique sur *Connect* en haut a droite,
+Ceci nous amene sur la console bash de la VM.
+
+On rentreras ensuite la commande
+```bash
+sudo apt install -y apache2
+```
+et voila !, apache est installé et le site de base est online.
+
+Il faut ensuite trouver *Public IPv4 address* la copier collé dans la bar de  navigation en haut est nous sommes sur notre site.
+Ou sinon *Public IPv4 DNS* en la copaint elle aussi dans la bar de navigation **MAIS** en verifiant bien la suppréssion du **S** de **HTTPS**.
+
+En moins de 5 minutes votre instance est lancée avec Apache d'installé.
