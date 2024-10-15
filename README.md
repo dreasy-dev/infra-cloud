@@ -48,3 +48,6 @@ Rendu Cours Exercice 1
 #### ID du volume EBS attaché : vol-0613be2109b60f1f7
 #### Taille du volume EBS attaché : 8 Go
 
+# 2
+
+![oui](./group-instances.png)
