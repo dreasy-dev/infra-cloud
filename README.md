@@ -268,9 +268,18 @@ IPv4
 SSH
 TCP
 22
-10.0.3.120/32
+gr-06a867e0f90db076c
 acces from bastion
 `
 
+![Rules](./inboundssh.png)
+
 ### Nouveau diagram:
 ![Diagram](./diagram2.drawio.png)
+
+
+## Remove EC2 access from the internet
+```bash 
+ec2-user@ip-10-0-11-229 ~ sudo yum remove ec2-* -y
+Dependencies resolved.
+```
