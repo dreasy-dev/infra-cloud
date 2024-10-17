@@ -20,6 +20,13 @@
     - [Security Group par défaut](#security-group-par-défaut)
 - [Diagram](#diagram)
 - [2](#2)
+    - [Instance 1 - mgilles-nextcloud](#instance-1---mgilles-nextcloud)
+    - [Instance 2 - mgilles-bastion](#instance-2---mgilles-bastion)
+- [Détails des Security Groups](#détails-des-security-groups)
+    - [Security Group associé à mgilles-bastion](#security-group-associé-à-mgilles-bastion)
+- [Détails du Network ACL](#détails-du-network-acl)
+- [Nouveau diagram](#nouveau-diagram)
+
 
 
 
@@ -264,4 +271,6 @@ TCP
 10.0.3.120/32
 acces from bastion
 `
+
+### Nouveau diagram:
 ![Diagram](./diagram2.drawio.png)
