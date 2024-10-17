@@ -95,3 +95,18 @@ Il faut ensuite trouver *Public IPv4 address* la copier collé dans la bar de  n
 Ou sinon *Public IPv4 DNS* en la copaint elle aussi dans la bar de navigation **MAIS** en verifiant bien la suppréssion du **S** de **HTTPS**.
 
 En moins de 5 minutes votre instance est lancée avec Apache d'installé.
+
+
+# TP 2 
+
+![oui](./vpc.png)
+![oui](./subnet.png)
+![oui](./gateay.png)
+![oui](./route.png)
+![oui](./acll.png)
+![oui](./secu.png)
+
+
+# Diagram 
+
+![diagram](./diagram.drawio.png)
