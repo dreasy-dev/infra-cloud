@@ -279,7 +279,5 @@ acces from bastion
 
 
 ## Remove EC2 access from the internet
-```bash 
-ec2-user@ip-10-0-11-229 ~ sudo yum remove ec2-* -y
-Dependencies resolved.
-```
+![oui](./denyEC2connect.png)
+
