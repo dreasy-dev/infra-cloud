@@ -1,12 +1,32 @@
 ## Sommaire
+- [TP 1](#tp-1)
+    - [Exo 1](#exo-1)
+    - [1](#1)
+    - [2](#2)
+    - [3 et 4](#3-et-4)
+    - [5](#5)
+- [Exo 2](#exo-2)
+- [Exo 3](#exo-3)
+    - [3.1](#31)
+    - [3.2](#32)
+    - [3.3](#33)
+- [TP 2](#tp-2)
+    - [Détails du VPC](#détails-du-vpc)
+    - [VPC](#vpc)
+    - [Subnets](#subnets)
+    - [Internet Gateway](#internet-gateway)
+    - [Tables de routage](#tables-de-routage)
+    - [Liste de contrôle d'accès par défaut (ACL)](#liste-de-contrôle-daccès-par-défaut-acl)
+    - [Security Group par défaut](#security-group-par-défaut)
+- [Diagram](#diagram)
+- [2](#2)
 
-- [I. TP 1](#tp-1)
-- [II. TP 2](#tp-2)
-- [III. TP 3](#tp-3)
- 
+
+
+
 
 # TP 1 
-
+## Exo 1
 | Région     | Type d'instance | vCPU | RAM   | Bande passante         | Coût horaire (EUR) |
 |------------|-----------------|------|-------|------------------------|--------------------|
 | Paris      | t3.small         | 2    | 2 GiB | Up to 5 Gigabit         | 0.0198             |
@@ -30,17 +50,18 @@
 | Zurich     | c6gd.medium      | 1    | 2 GiB | Up to 10 Gigabit        | 0.0461             |
 
 
-# 1.1 
+## 1 
 #### Le t4g.small de Stockholm semble etre un bon candidat et surtout suffisant pour nos besoins.
 
-# 1.2
+## 2
 
 ![Photo](instance.png)
 
-# 1.3/4
-![Photo](apache.png)
+## 3 et 4
 
-# 1.5
+![Photo](ping.png)
+
+## 5
 
 #### Instance ID : i-0ee0b4d388338d29b
 #### Type d'instance : t4g.small
@@ -55,7 +76,7 @@
 #### ID du volume EBS attaché : vol-0613be2109b60f1f7
 #### Taille du volume EBS attaché : 8 Go
 
-# 2
+# Exo 2
 
 ![oui](./group-instances.png)
 ![oui](./tag.png)
@@ -63,7 +84,7 @@
 ![oui](tagg3.png)
 
 
-# 3
+# Exo 3
 
 ## 3.1
 ![oui](./oui.png)
@@ -106,7 +127,7 @@ En moins de 5 minutes votre instance est lancée avec Apache d'installé.
 
 # TP 2 
 
-# Détails du VPC
+## Détails du VPC
 
 ## VPC
 - **ID** : `vpc-0741c1bc7292a5d7c`
@@ -194,3 +215,53 @@ En moins de 5 minutes votre instance est lancée avec Apache d'installé.
 
 
 # 2
+
+## Instance 1 - mgilles-nextcloud
+- **ID** : `i-0bd42bba33ae8a7f2`
+- **Nom (tag Name)** : `mgilles-nextcloud`
+- **Type** : `t3.micro`
+- **IP privée** : `10.0.142.28`
+- **Subnet associé** : `mgilles-subnet-private1-eu-north-1a`
+- **Security Group associé** : ``
+- **Key Pair associé** : `nexcloud-mgilles`
+
+## Instance 2 - mgilles-bastion
+- **ID** : `i-0a67026a1f559aea8`
+- **Nom (tag Name)** : `mgilles-bastion`
+- **Type** : `t3.micro`
+- **IP publique** : `16.171.111.160`
+- **IP privée** : `10.0.3.120`
+- **Subnet associé** : `mgilles-subnet-public1-eu-north-1a`
+- **Security Group associé** : ``
+- **Key Pair associé** : `bastion-out`
+
+# Détails des Security Groups
+## Security Group associé à mgilles-bastion
+![Security Group associé à mgilles-bastion](./rule.png)
+
+
+# Détails du Network ACL
+
+- **ID** : `acl-085ae6180e66b1a80`
+- **Nom (tag Name)** : `mgilles-vpc`
+
+### Règles bastion ssh :
+- **Règle 1** : `sgr-06a867e0f90db076c
+IPv4
+SSH
+TCP
+22
+195.7.117.146/32
+acces bastion`
+
+### Règles nextcloud ssh :
+- **Règle 1** : `	
+sgr-00ebefa79983b6ddd
+IPv4
+SSH
+TCP
+22
+10.0.3.120/32
+acces from bastion
+`
+![Diagram](./diagram2.drawio.png)
