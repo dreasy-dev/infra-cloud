@@ -1,4 +1,11 @@
-Rendu Cours Exercice 1 
+## Sommaire
+
+- [I. TP 1](#tp-1)
+- [II. TP 2](#tp-2)
+- [III. TP 3](#tp-3)
+ 
+
+# TP 1 
 
 | Région     | Type d'instance | vCPU | RAM   | Bande passante         | Coût horaire (EUR) |
 |------------|-----------------|------|-------|------------------------|--------------------|
@@ -99,14 +106,91 @@ En moins de 5 minutes votre instance est lancée avec Apache d'installé.
 
 # TP 2 
 
-![oui](./vpc.png)
-![oui](./subnet.png)
-![oui](./gateay.png)
-![oui](./route.png)
-![oui](./acll.png)
-![oui](./secu.png)
+# Détails du VPC
+
+## VPC
+- **ID** : `vpc-0741c1bc7292a5d7c`
+- **Nom (tag Name)** : `mgilles-vpc`
+- **Plage d'adresses IP** : `10.0.0.0/16`
+
+## Subnets
+### mgilles-subnet-public2
+- **ID** : `subnet-02fca9a1bceabb...`
+- **Nom (tag Name)** : `mgilles-subnet-public2`
+- **Plage d'adresses IP** : `10.0.16.0/20`
+- **Zone de Disponibilité (AZ)** : `eu-north-1b`
+- **Table de routage associée** : `acl-085ae6180e66b1a80`
+
+### mgilles-subnet-public3
+- **ID** : `subnet-0921864e0f4f4...`
+- **Nom (tag Name)** : `mgilles-subnet-public3`
+- **Plage d'adresses IP** : `10.0.32.0/20`
+- **Zone de Disponibilité (AZ)** : `eu-north-1c`
+- **Table de routage associée** : `acl-085ae6180e66b1a80`
+
+### mgilles-subnet-private2
+- **ID** : `subnet-0079b806caa8b...`
+- **Nom (tag Name)** : `mgilles-subnet-private2`
+- **Plage d'adresses IP** : `10.0.144.0/20`
+- **Zone de Disponibilité (AZ)** : `eu-north-1b`
+- **Table de routage associée** : `acl-085ae6180e66b1a80`
+
+### mgilles-subnet-public1
+- **ID** : `subnet-05147ec758846...`
+- **Nom (tag Name)** : `mgilles-subnet-public1`
+- **Plage d'adresses IP** : `10.0.0.0/20`
+- **Zone de Disponibilité (AZ)** : `eu-north-1a`
+- **Table de routage associée** : `acl-085ae6180e66b1a80`
+
+### mgilles-subnet-private1
+- **ID** : `subnet-012d8858f7484...`
+- **Nom (tag Name)** : `mgilles-subnet-private1`
+- **Plage d'adresses IP** : `10.0.128.0/20`
+- **Zone de Disponibilité (AZ)** : `eu-north-1a`
+- **Table de routage associée** : `acl-085ae6180e66b1a80`
+
+### mgilles-subnet-private3
+- **ID** : `subnet-036486cc22430...`
+- **Nom (tag Name)** : `mgilles-subnet-private3`
+- **Plage d'adresses IP** : `10.0.160.0/20`
+- **Zone de Disponibilité (AZ)** : `eu-north-1c`
+- **Table de routage associée** : `acl-085ae6180e66b1a80`
+
+## Internet Gateway
+- **ID** : `igw-0e0d954479f42ed82`
+- **Nom (tag Name)** : `mgilles-igw
+`
+
+## Tables de routage
+### Table de routage 1
+- **ID** : `rtb-0c4e0f490d57be5ce`
+- **Nom (tag Name)** : ` mgilles-rtb-private3-eu-north-1c`
+- **Routes** :
+ 10.0.0.0/16 local
+
+### Table de routage 2
+- **ID** : `rtb-040b0156e76959ffa`
+- **Nom (tag Name)** : `mgilles-rtb-private1-eu-north-1a`
+- **Routes** :
+ 10.0.0.0/16 local
+
+### Table de routage 3
+- **ID** : `tb-0312a34680cfb4d33`
+- **Nom (tag Name)** : `mgilles-rtb-private2-eu-north-1b`
+- **Routes** :
+ 10.0.0.0/16 local
+
+
+## Liste de contrôle d'accès par défaut (ACL)
+- **ID** : `acl-085ae6180e66b1a80`
+
+## Security Group par défaut
+- **ID** : `sg-0331fe4bcd783608b`
 
 
 # Diagram 
 
 ![diagram](./diagram.drawio.png)
+
+
+# 2
