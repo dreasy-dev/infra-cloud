@@ -1,6 +1,6 @@
 ## 1. List Users IAM
 ```bash
-users:~/environment $ aws iam list-users
+users:~/environment $ aws iam list-users --profile formation-infra-cloud
 
 {
     "Users": [
@@ -48,7 +48,7 @@ users:~/environment $ aws iam list-users
 
 ### 2. List Users in the path /users/ynov
 ```bash
-users:~/environment $ aws iam list-users --path-prefix "/users/ynov/"
+users:~/environment $ aws iam list-users --path-prefix "/users/ynov/" --profile formation-infra-cloud
 
 {
     "Users": [
@@ -99,31 +99,33 @@ users:~/environment $ aws iam list-users --path-prefix "/users/ynov/"
 
 ### 3. List Usernames in the path /users/ynov/
 ```bash
-users:~/environment $ aws iam list-users --path-prefix "/users/ynov/" --query "Users[*].UserName" --output text
+users:~/environment $ aws iam list-users --path-prefix "/users/ynov/" --query "Users[*].UserName" --profile formation-infra-cloud
 
-afernandesjose  
-apajak  
-apougearddulimbert      
-clhuillier      
-edurand 
-emestre 
-fgarcia 
-friviere        
-hjarry  
-jpaillusseau    
-jtaillart       
-kdussol 
-lgarrabos       
-lgasperment     
-lgouasquet      
-mgilles  
-mhamond 
-plarrode        
-qvos    
-rdanger 
-rgebel  
-sdelory 
-tpavan
+[
+    "afernandesjose",
+    "apajak",
+    "apougearddulimbert",
+    "clhuillier",
+    "edurand",
+    "emestre",
+    "fgarcia",
+    "friviere",
+    "hjarry",
+    "jpaillusseau",
+    "jtaillart",
+    "kdussol",
+    "lgarrabos",
+    "lgasperment",
+    "lgouasquet",
+    "mgilles",
+    "mhamond",
+    "plarrode",
+    "qvos",
+    "rdanger",
+    "rgebel",
+    "sdelory",
+    "tpavan"
+]
 
 ```
 
