@@ -302,6 +302,23 @@ output "nextcloud_private_ip" {
   description = "Adresse IP Privée de l'instance nextcloud"
   value       = aws_instance.nextcloud.private_ip
 }
+resource "local_file" "ssh_config" {
+  content = <<-EOT
+    Host bastion
+       Hostname ${aws_instance.bastion.public_ip}
+       User ubuntu
+       IdentitiesOnly yes
+       IdentityFile /Users/dreasy/Downloads/bastion-out.pem
+
+    Host nextcloud
+       Hostname ${aws_instance.nextcloud.private_ip}
+       User ubuntu
+       ProxyCommand ssh -W %h:%p bastion
+       IdentityFile /Users/dreasy/Downloads/nextcloud.pem
+    EOT
+
+  filename = "${path.module}/ssh_config"
+}
 ```
 
 ### security_groups.tf
