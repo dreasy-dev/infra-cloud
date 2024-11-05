@@ -66,7 +66,7 @@ resource "aws_route_table" "public" {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.gw.id
   }
-  tags = merge(local.tags, { Name = "${local.name}-public-route-table" })
+  tags = { Name = "${local.name}-public-route-table" })
 }
 ```
 
@@ -78,7 +78,7 @@ resource "aws_subnet" "public_subnet_1" {
   cidr_block              = "10.0.1.0/24"
   availability_zone       = "eu-north-1a"
   map_public_ip_on_launch = true
-  tags                    = merge(local.tags, { Name = "${local.name}-public-subnet-1" })
+  tags                    = { Name = "${local.name}-public-subnet-1" })
 }
 #Public 2
 resource "aws_subnet" "public_subnet_2" {
@@ -86,7 +86,7 @@ resource "aws_subnet" "public_subnet_2" {
   cidr_block              = "10.0.2.0/24"
   availability_zone       = "eu-north-1b"
   map_public_ip_on_launch = true
-  tags                    = merge(local.tags, { Name = "${local.name}-public-subnet-2" })
+  tags                    = { Name = "${local.name}-public-subnet-2" })
 }
 #Public 3
 resource "aws_subnet" "public_subnet_3" {
@@ -94,7 +94,7 @@ resource "aws_subnet" "public_subnet_3" {
   cidr_block              = "10.0.3.0/24"
   availability_zone       = "eu-north-1c"
   map_public_ip_on_launch = true
-  tags                    = merge(local.tags, { Name = "${local.name}-public-subnet-3" })
+  tags                    = { Name = "${local.name}-public-subnet-3" })
 }
 
 #Private 1
@@ -102,21 +102,21 @@ resource "aws_subnet" "private_subnet_1" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.4.0/24"
   availability_zone = "eu-north-1a"
-  tags              = merge(local.tags, { Name = "${local.name}-private-subnet-1" })
+  tags              = { Name = "${local.name}-private-subnet-1" })
 }
 #Private 2
 resource "aws_subnet" "private_subnet_2" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.5.0/24"
   availability_zone = "eu-north-1b"
-  tags              = merge(local.tags, { Name = "${local.name}-private-subnet-2" })
+  tags              = { Name = "${local.name}-private-subnet-2" })
 }
 # Private 3
 resource "aws_subnet" "private_subnet_3" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.6.0/24"
   availability_zone = "eu-north-1c"
-  tags              = merge(local.tags, { Name = "${local.name}-private-subnet-3" })
+  tags              = { Name = "${local.name}-private-subnet-3" })
 }
 ```
 locals.tf
@@ -155,17 +155,17 @@ resource "aws_route_table_association" "public_subnet_3" {
 
 resource "aws_route_table" "private_1" {
   vpc_id = aws_vpc.main.id
-  tags   = merge(local.tags, { Name = "${local.name}-private-route-table-1" })
+  tags   = { Name = "${local.name}-private-route-table-1" })
 }
 
 resource "aws_route_table" "private_2" {
   vpc_id = aws_vpc.main.id
-  tags   = merge(local.tags, { Name = "${local.name}-private-route-table-2" })
+  tags   = { Name = "${local.name}-private-route-table-2" })
 }
 
 resource "aws_route_table" "private_3" {
   vpc_id = aws_vpc.main.id
-  tags   = merge(local.tags, { Name = "${local.name}-private-route-table-3" })
+  tags   = { Name = "${local.name}-private-route-table-3" })
 }
 
 # Private tabel association
@@ -308,7 +308,7 @@ output "nextcloud_private_ip" {
 ```bash
 resource "aws_security_group" "bastion_sg" {
   vpc_id = aws_vpc.main.id
-  tags   = merge(local.tags, { Name = "${local.name}-bastion-sg" })
+  tags   = { Name = "${local.name}-bastion-sg" })
 
   ingress {
     from_port   = 22
@@ -333,7 +333,7 @@ resource "aws_security_group" "bastion_sg" {
 }
 resource "aws_security_group" "private_app_sg" {
   vpc_id = aws_vpc.main.id
-  tags   = merge(local.tags, { Name = "${local.name}-private-app-sg" })
+  tags   = { Name = "${local.name}-private-app-sg" })
 
   ingress {
     from_port       = 22
@@ -361,12 +361,28 @@ resource "aws_security_group" "private_app_sg" {
 
 ### ec2.tf
 ```bash 
-resource "aws_instance" "bastion" {
-  ami           = "ami-0dcbfe330b31195ff"  
-  instance_type = "t4g.small"
-  subnet_id     = aws_subnet.public_subnet_1.id
-  key_name      = aws_key_pair.bastion.key_name
 
+data "aws_ami" "ubuntu" {
+  most_recent = true
+
+  owners = ["099720109477"]  # This is the owner ID for Canonical (Ubuntu)
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"] # Change as needed for different Ubuntu versions
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
+resource "aws_instance" "bastion" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t4g.micro"
+  key_name      = aws_key_pair.bastion.key_name
+  subnet_id     = aws_subnet.public_subnet_1.id
   vpc_security_group_ids = [aws_security_group.bastion_sg.id]
   provisioner "file" {
     source      = "ssh/nextcloud"
@@ -394,18 +410,17 @@ resource "aws_instance" "bastion" {
   }
 
 
-  tags = merge(local.tags, { Name = "${local.name}-bastion-instance" })
+  tags = { Name = "${local.name}-bastion-instance" })
 }
 
 resource "aws_instance" "nextcloud" {
-  ami           = "ami-0dcbfe330b31195ff"  
-  instance_type = "t4g.small"
-  subnet_id     = aws_subnet.private_subnet_1.id
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t4g.micro"
   key_name      = aws_key_pair.nextcloud.key_name
-
+  subnet_id     = aws_subnet.private_subnet_1.id
   vpc_security_group_ids = [aws_security_group.private_app_sg.id]
 
-  tags = merge(local.tags, { Name = "${local.name}-nextcloud-instance" })
+  tags = { Name = "${local.name}-nextcloud" })
 }
 ```
 
@@ -432,7 +447,7 @@ resource "aws_network_acl" "bastion_acl" {
     aws_subnet.public_subnet_3.id
   ]
 
-  tags = merge(local.tags, { Name = "${local.name}-bastion-acl" })
+  tags = { Name = "${local.name}-bastion-acl" })
 }
 
 resource "aws_network_acl_rule" "allow_vpn_ssh" {
@@ -495,7 +510,7 @@ resource "aws_network_acl" "nextcloud_acl" {
     aws_subnet.private_subnet_3.id
   ]
 
-  tags = merge(local.tags, { Name = "${local.name}-nextcloud-acl" })
+  tags = { Name = "${local.name}-nextcloud-acl" })
 }
 
 
