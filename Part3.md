@@ -369,7 +369,7 @@ data "aws_ami" "ubuntu" {
 
   filter {
     name   = "name"
-    values = ["buntu/images/hvm-ssd/ubuntu-jammy-22.04-arm64-server-*"] # Change as needed for different Ubuntu versions
+    values = ["buntu/images/hvm-ssd/ubuntu-jammy-22.04-arm64-server-*"] 
   }
 
   filter {
