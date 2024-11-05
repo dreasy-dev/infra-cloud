@@ -384,32 +384,7 @@ resource "aws_instance" "bastion" {
   key_name      = aws_key_pair.bastion.key_name
   subnet_id     = aws_subnet.public_subnet_1.id
   vpc_security_group_ids = [aws_security_group.bastion_sg.id]
-  provisioner "file" {
-    source      = "ssh/nextcloud"
-    destination = "/home/ubuntu/nextcloud_key"
-
-    connection {
-      type        = "ssh"
-      user        = "ubuntu"
-      private_key = file("ssh/bastion")
-      host        = self.public_ip
-    }
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "chmod 600 /home/ubuntu/nextcloud_key"
-    ]
-
-    connection {
-      type        = "ssh"
-      user        = "ubuntu"
-      private_key = file("ssh/bastion")
-      host        = self.public_ip
-    }
-  }
-
-
+  
   tags = { Name = "${local.name}-bastion-instance" })
 }
 
