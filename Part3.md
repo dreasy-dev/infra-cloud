@@ -302,10 +302,6 @@ output "nextcloud_private_ip" {
   description = "Adresse IP Privée de l'instance nextcloud"
   value       = aws_instance.nextcloud.private_ip
 }
-output "nextcloud_instance_id" {
-  description = "ID de l'instance privée pour Nextcloud"
-  value       = aws_instance.nextcloud.id
-}
 ```
 
 ### security_groups.tf
@@ -321,6 +317,13 @@ resource "aws_security_group" "bastion_sg" {
     cidr_blocks = ["195.7.117.146/32"]
   }
 
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["51.44.16.230/32"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -328,7 +331,6 @@ resource "aws_security_group" "bastion_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
 resource "aws_security_group" "private_app_sg" {
   vpc_id = aws_vpc.main.id
   tags   = merge(local.tags, { Name = "${local.name}-private-app-sg" })
@@ -421,10 +423,13 @@ resource "aws_key_pair" "nextcloud" {
 
 ### acl.tf
 ```bash
+# Bastion ACL
 resource "aws_network_acl" "bastion_acl" {
   vpc_id = aws_vpc.main.id
   subnet_ids = [
-    aws_subnet.public_subnet_1.id
+    aws_subnet.public_subnet_1.id,
+    aws_subnet.public_subnet_2.id,
+    aws_subnet.public_subnet_3.id
   ]
 
   tags = merge(local.tags, { Name = "${local.name}-bastion-acl" })
@@ -441,6 +446,17 @@ resource "aws_network_acl_rule" "allow_vpn_ssh" {
   to_port        = 22
 }
 
+resource "aws_network_acl_rule" "allow_secondary_ip_ssh" {
+  network_acl_id = aws_network_acl.bastion_acl.id
+  rule_number    = 105
+  protocol       = "tcp"
+  rule_action    = "allow"
+  egress         = false
+  cidr_block     = "51.44.16.230/32"
+  from_port      = 22
+  to_port        = 22
+}
+
 resource "aws_network_acl_rule" "deny_ssh_other" {
   network_acl_id = aws_network_acl.bastion_acl.id
   rule_number    = 110
@@ -451,25 +467,58 @@ resource "aws_network_acl_rule" "deny_ssh_other" {
   from_port      = 22
   to_port        = 22
 }
-# http and https outboundy
+
 resource "aws_network_acl_rule" "allow_all_egress" {
   network_acl_id = aws_network_acl.bastion_acl.id
-  rule_number    = 100
-  protocol       = "-1"  
+  rule_number    = 120
+  protocol       = "-1"
   rule_action    = "allow"
   egress         = true
   cidr_block     = "0.0.0.0/0"
 }
 
-# http and https inbound
 resource "aws_network_acl_rule" "allow_all_inbound" {
   network_acl_id = aws_network_acl.bastion_acl.id
-  rule_number    = 120
-  protocol       = "-1"  
+  rule_number    = 130
+  protocol       = "-1"
   rule_action    = "allow"
   egress         = false
   cidr_block     = "0.0.0.0/0"
 }
+
+# Nextcloud ACL
+resource "aws_network_acl" "nextcloud_acl" {
+  vpc_id = aws_vpc.main.id
+  subnet_ids = [
+    aws_subnet.private_subnet_1.id,
+    aws_subnet.private_subnet_2.id,
+    aws_subnet.private_subnet_3.id
+  ]
+
+  tags = merge(local.tags, { Name = "${local.name}-nextcloud-acl" })
+}
+
+
+resource "aws_network_acl_rule" "allow_private_subnets_ssh" {
+  network_acl_id = aws_network_acl.nextcloud_acl.id  
+  rule_number    = 100
+  protocol       = "tcp"
+  rule_action    = "allow"
+  egress         = false
+  cidr_block     = "10.0.0.0/16"  
+  from_port      = 22
+  to_port        = 22
+}
+
+resource "aws_network_acl_rule" "allow_all_egress_nextcloud" {
+  network_acl_id = aws_network_acl.nextcloud_acl.id
+  rule_number    = 110
+  protocol       = "-1"
+  rule_action    = "allow"
+  egress         = true
+  cidr_block     = "0.0.0.0/0"
+}
+
 ```
 
 ### Commande avant le `terraform apply`
