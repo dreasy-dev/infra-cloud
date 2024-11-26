@@ -14,7 +14,11 @@
 
 - [TP 4](./Part3.md)
 
-### TP AWS - Base de données et stockage
+### TP AWS - POC et stockage
 
 - [TP 5](./Part4.md)
+
+### TP AWS - DB 
+
+- [TP 6 ](./Part5.md)
 

@@ -39,10 +39,36 @@ resource "aws_instance" "nextcloud" {
               sudo mkdir -p /mnt/efs
               sudo mount -t nfs4 -o nfsvers=4.1 ${aws_efs_file_system.nextcloud_efs.dns_name}:/ /mnt/efs
               sudo echo "${aws_efs_file_system.nextcloud_efs.dns_name}:/ /mnt/efs nfs4 defaults 0 0" | sudo tee -a /etc/fstab
+            
               EOF
 
 
   tags = {
     Name = "${local.name}-nextcloud"
+  }
+}
+
+
+resource "aws_db_instance" "nextcloud_rds" {
+  allocated_storage         = 20
+  storage_type              = "gp2"
+  instance_class            = "db.t4g.micro"
+  engine                    = "mysql"
+  engine_version            = "8.0"
+  db_name                   = "nextcloud"
+  username                  = "admin"
+  password                  = "nextcloud"
+  parameter_group_name      = "default.mysql8.0"
+  db_subnet_group_name      = aws_db_subnet_group.rds_db_subnet_group.name
+  vpc_security_group_ids    = [aws_security_group.rds_sg.id]
+  multi_az                  = true
+  publicly_accessible       = false
+  storage_encrypted         = true
+  final_snapshot_identifier = "rds-final-snapshot"
+  skip_final_snapshot       = true
+
+  tags = {
+    Name  = "${local.name}-nextcloud-rds"
+    Owner = local.user
   }
 }

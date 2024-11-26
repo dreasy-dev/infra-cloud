@@ -29,6 +29,19 @@ resource "aws_subnet" "public_subnet_3" {
   }
 }
 
+resource "aws_db_subnet_group" "rds_db_subnet_group" {
+  name = "${local.name}-db-subnet-group"
+  subnet_ids = [
+    aws_subnet.private_subnet_1.id,
+    aws_subnet.private_subnet_2.id,
+    aws_subnet.private_subnet_3.id
+  ]
+
+  tags = {
+    Name = "${local.name}-db-subnet-group"
+  }
+}
+
 # Sous-réseaux privés
 resource "aws_subnet" "private_subnet_1" {
   vpc_id            = aws_vpc.main.id

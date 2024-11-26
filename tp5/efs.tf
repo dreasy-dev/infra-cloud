@@ -1,5 +1,5 @@
 resource "aws_efs_file_system" "nextcloud_efs" {
-  creation_token   = "nextcloud-efs-${timestamp()}"
+  creation_token   = "nextcloud-efs-${plantimestamp()}"
   performance_mode = "generalPurpose"
   encrypted        = true
   tags = {
