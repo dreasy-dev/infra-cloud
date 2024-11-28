@@ -1,0 +1,11 @@
+Host bastion
+   Hostname 16.171.57.80
+   User ubuntu
+   IdentitiesOnly yes
+   IdentityFile /Users/dreasy/Downloads/bastion-out.pem
+
+Host nextcloud
+   Hostname 10.0.4.199
+   User ubuntu
+   ProxyCommand ssh -W %h:%p bastion
+   IdentityFile /Users/dreasy/Downloads/nextcloud.pem
