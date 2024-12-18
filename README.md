@@ -20,5 +20,9 @@
 
 ### TP AWS - DB 
 
-- [TP 6 ](./Part5.md)
+- [TP 7 ](./Part5.md)
+
+### TP AWS - AMI
+
+- [TP 9](./TP9.md)
 
